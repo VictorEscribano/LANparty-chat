@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>C2P 👫 Diagnosis</title> <!-- Set the web page title -->
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
+    <!-- Add your custom CSS -->
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <div id="chat" class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="messages" class="chat-messages">
+                    {% for message in messages %}
+                        <div class="message">
+                            [<span class="ip">{{ message['ip'] }} - {{ message['time'] }}</span>] 
+                            <span class="message-text">{{ message['message'] }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form id="message-form" action="/send_message" method="POST">
+                    <div class="input-group mb-3">
+                        <input id="message-input" autocomplete="off" type="text" name="message" placeholder="Type your message" class="form-control">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const form = document.getElementById('message-form');
+        const input = document.getElementById('message-input');
+        const messages = document.getElementById('messages');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const message = input.value.trim();
+            if (message) {
+                // Send the message to the server
+                fetch('/send_message', {
+                    method: 'POST',
+                    body: new URLSearchParams({ 'message': message }),
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                });
+                input.value = '';
+            }
+        });
+
+        // Function to add a new message to the chat
+        function addMessage(message) {
+            const li = document.createElement('li');
+            li.textContent = message;
+            messages.appendChild(li);
+        }
+
+        // Poll the server for new messages every 1 second
+        function pollForMessages() {
+            fetch('/').then(response => response.text()).then(data => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+                const newMessages = doc.getElementById('messages').innerHTML;
+                messages.innerHTML = newMessages;
+            });
+        }
+
+        // Poll for new messages every second
+        setInterval(pollForMessages, 1000);
+
+            // Function to scroll to the bottom of the chat messages
+        function scrollToBottom() {
+            var chatMessages = document.getElementById('messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Poll the server for new messages every 1 second
+        setInterval(function() {
+            pollForMessages();
+            scrollToBottom(); // Scroll to the bottom after updating messages
+        }, 1000);
+    </script>
+</body>
+</html>

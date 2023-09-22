@@ -1,0 +1,45 @@
+/* Custom styles for the chat */
+body {
+    background-color: #000; /* Background color for the entire page */
+}
+
+#chat {
+    max-width: 600px; /* Set a maximum width for the chat container */
+    margin: 0 auto; /* Center the chat container on the page */
+    padding: 20px 20px 0 20px; /* Add padding to the top only */
+    background-color: #222; /* Dark background color for the chat container */
+    color: #fff; /* Text color for chat messages */
+}
+
+.message {
+    background-color: #007bff; /* Background color for chat messages */
+    color: #fff; /* Text color for chat messages */
+    border-radius: 5px; /* Rounded corners for chat messages */
+    padding: 8px;
+    margin-bottom: 10px;
+    min-height: 40px; /* Set a minimum height for the message box */
+    word-wrap: break-word; /* Allow long words to wrap */
+}
+
+.message-text {
+    display: inline; /* Display message text inline */
+}
+
+/* Style the input field and button */
+#message-input {
+    border-top-left-radius: 0; /* Remove border-radius on the top-left */
+    border-bottom-left-radius: 0; /* Remove border-radius on the bottom-left */
+    height: 60px; /* Increase the height of the input field */
+    padding: 15px; /* Add padding to the input field */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* Style the chat messages */
+.chat-messages {
+    max-height: 400px; /* Increase the height of the chat messages */
+    overflow-y: auto; /* Add scrollbars when needed */
+}
